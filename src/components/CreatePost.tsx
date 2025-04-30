@@ -8,7 +8,6 @@ interface PostInput {
 }
 
 const createPost = async (post: PostInput, imageFile: File) => {
-  // const { data, error } = await supabase.from("posts").insert(post)
 
   const filePath = `${post.title}-${Date.now()}-${imageFile.name}`
 
@@ -30,7 +29,7 @@ const CreatePost = () => {
   const [content, setContent] = useState<string>("")
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
 
-  const { mutate } = useMutation({
+  const { mutate, isError, isPending } = useMutation({
     mutationFn: (data: { post: PostInput, imageFile: File }) => {
       return createPost(data.post, data.imageFile)
     }
@@ -38,6 +37,8 @@ const CreatePost = () => {
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault()
+
+    if (!selectedFile) return
 
     mutate({ post: { title, content }, imageFile: selectedFile })
   }
@@ -105,11 +106,10 @@ const CreatePost = () => {
         type="submit"
         className="bg-purple-500 text-white px-4 py-2 rounded cursor-pointer"
       >
-        {/* {isPending ? "Creating..." : "Create Post"} */}
-        Create Post
+        {isPending ? "Creating..." : "Create Post"}
       </button>
 
-      {/* {isError && <p className="text-red-500"> Error creating post.</p>} */}
+      {isError && <p className="text-red-500"> Error creating post.</p>}
     </form>
   )
 }
