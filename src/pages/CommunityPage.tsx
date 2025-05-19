@@ -1,4 +1,4 @@
-import React from 'react'
+
 import CommunityDisplay from '../components/CommunityDisplay'
 import { useParams } from 'react-router'
 
