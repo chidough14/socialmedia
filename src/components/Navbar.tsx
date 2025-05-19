@@ -43,7 +43,7 @@ const Navbar = () => {
                 <div className='flex items-center space-x-4'>
                   {
                     user.user_metadata.avatar_url && (
-                      <img src={ user.user_metadata.avatar_url} alt='profile' className='w-8 h-8 rounded-full object-cover' />
+                      <img src={user.user_metadata.avatar_url} alt='profile' className='w-8 h-8 rounded-full object-cover' />
                     )
                   }
                   <span className='text-gray-300'>{displayName}</span>
@@ -93,7 +93,7 @@ const Navbar = () => {
           {
             menuOpen && (
               <div className='md:hidden bg-[rgba(10,10,10,0.9)]'>
-                <div className='px-2 pt-2 pb-3 space-y-1'>
+                <div className='px-2 pt-2 pb-3 space-y-1 mt-40'>
                   <Link
                     to={"/"}
                     className='block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700'
@@ -110,6 +110,26 @@ const Navbar = () => {
                     to={"/community/create"}
                     className='block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700'
                   > Create Community </Link>
+
+                  {
+                    user ? (
+                      <div className='flex items-center space-x-4'>
+                        {
+                          user.user_metadata.avatar_url && (
+                            <img src={user.user_metadata.avatar_url} alt='profile' className='w-8 h-8 rounded-full object-cover' />
+                          )
+                        }
+                        <span className='text-gray-300'>{displayName}</span>
+                        <button onClick={signOut} className='bg-red-500 px-3 py-1 rounded'>
+                          Sign out
+                        </button>
+                      </div>
+                    ) : (
+                      <button onClick={signInWithGithub} className='bg-blue-500 px-3 py-1 rounded'>
+                        Sign in with Github
+                      </button>
+                    )
+                  }
                 </div>
               </div>
             )
