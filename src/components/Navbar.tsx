@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router'
 import { useAuth } from '../context/AuthContext'
 
@@ -7,6 +7,27 @@ const Navbar = () => {
   const { signInWithGithub, signOut, user } = useAuth()
 
   const displayName = user?.user_metadata.user_name || user?.email
+
+  const menuRef = useRef<HTMLDivElement | null>(null);
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+      setMenuOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    if (menuOpen) {
+      document.addEventListener('click', handleClickOutside);
+    } else {
+      document.removeEventListener('click', handleClickOutside);
+    }
+
+    // Cleanup
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [menuOpen]);
 
   return (
     <nav className='fixed top-0 w-full z-40 bg-[rgba(10,10,10,0.8)] backdrop-blur-lg border-b border-white/10 shadow-lg'>
@@ -62,7 +83,10 @@ const Navbar = () => {
           {/* Mobile menu button */}
           <div className='md:hidden'>
             {" "}
-            <button onClick={() => setMenuOpen((prev) => !prev)}>
+            <button onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+              e.stopPropagation()
+              setMenuOpen((prev) => !prev)
+            }}>
               <svg
                 className="w-6 h-6"
                 fill="none"
@@ -92,8 +116,8 @@ const Navbar = () => {
           {/* Mobile links */}
           {
             menuOpen && (
-              <div className='md:hidden bg-[rgba(10,10,10,0.9)]'>
-                <div className='px-2 pt-2 pb-3 space-y-1 mt-40'>
+              <div className='md:hidden bg-[rgba(10,10,10,0.9)]' ref={menuRef}>
+                <div className='px-2 pt-2 pb-3 space-y-1 mt-60'>
                   <Link
                     to={"/"}
                     className='block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700'
@@ -113,16 +137,22 @@ const Navbar = () => {
 
                   {
                     user ? (
-                      <div className='flex items-center space-x-4'>
-                        {
-                          user.user_metadata.avatar_url && (
-                            <img src={user.user_metadata.avatar_url} alt='profile' className='w-8 h-8 rounded-full object-cover' />
-                          )
-                        }
-                        <span className='text-gray-300'>{displayName}</span>
-                        <button onClick={signOut} className='bg-red-500 px-3 py-1 rounded'>
-                          Sign out
-                        </button>
+                      <div>
+                        <div className='flex items-center space-x-4'>
+                          {
+                            user.user_metadata.avatar_url && (
+                              <img src={user.user_metadata.avatar_url} alt='profile' className='w-8 h-8 rounded-full object-cover' />
+                            )
+                          }
+                          <span className='text-gray-300'>{displayName}</span>
+                        </div>
+
+                        <div>
+                          <button onClick={signOut} className='bg-red-500 px-3 py-1 rounded mt-3'>
+                            Sign out
+                          </button>
+                        </div>
+
                       </div>
                     ) : (
                       <button onClick={signInWithGithub} className='bg-blue-500 px-3 py-1 rounded'>
