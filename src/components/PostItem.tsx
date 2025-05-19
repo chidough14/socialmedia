@@ -1,4 +1,4 @@
-import React from 'react'
+
 import { Post } from './PostList'
 import { Link } from 'react-router'
 
