@@ -3,6 +3,7 @@ import React, { ChangeEvent, useState } from 'react'
 import { supabase } from '../supabase-client'
 import { useAuth } from '../context/AuthContext'
 import { Community, fetchCommunities } from './CommunityList'
+import { useNavigate } from 'react-router'
 
 interface PostInput {
   title: string
@@ -21,7 +22,11 @@ const createPost = async (post: PostInput, imageFile: File) => {
 
   const { data: publicUrlData } = await supabase.storage.from("post-images").getPublicUrl(filePath)
 
-  const { data, error } = await supabase.from("posts").insert({ ...post, image_url: publicUrlData.publicUrl })
+  const { data, error } = await supabase
+    .from("posts")
+    .insert({ ...post, image_url: publicUrlData.publicUrl })
+    .select()
+    .single()
 
   if (error) throw new Error(error.message)
 
@@ -34,6 +39,8 @@ const CreatePost = () => {
   const [communityId, setCommunityId] = useState<number | null>(null)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
 
+  const navigate = useNavigate()
+
   const { user } = useAuth()
 
   const { data: communities } = useQuery<Community[], Error>({ queryKey: ["communities"], queryFn: fetchCommunities })
@@ -41,6 +48,9 @@ const CreatePost = () => {
   const { mutate, isError, isPending } = useMutation({
     mutationFn: (data: { post: PostInput, imageFile: File }) => {
       return createPost(data.post, data.imageFile)
+    },
+    onSuccess: (data) => {
+      navigate(`/post/${data.id}`)
     }
   })
 
@@ -49,14 +59,14 @@ const CreatePost = () => {
 
     if (!selectedFile) return
 
-    mutate({ 
-      post: { 
-        title, 
-        content, 
-        avatar_url: user?.user_metadata.avatar_url || null, 
-        community_id: communityId 
-      }, 
-      imageFile: selectedFile 
+    mutate({
+      post: {
+        title,
+        content,
+        avatar_url: user?.user_metadata.avatar_url || null,
+        community_id: communityId
+      },
+      imageFile: selectedFile
     })
   }
 

@@ -64,10 +64,19 @@ const Navbar = () => {
                 <div className='flex items-center space-x-4'>
                   {
                     user.user_metadata.avatar_url && (
-                      <img src={user.user_metadata.avatar_url} alt='profile' className='w-8 h-8 rounded-full object-cover' />
+                      <Link
+                        to={"/profile"}
+                        className='text-gray-300 hover:text-white transition-colors'
+                      >
+                        <div className='flex justify-between'>
+                          <img src={user.user_metadata.picture} alt='profile' className='w-8 h-8 rounded-full object-cover' />
+                          <span className='text-gray-300'>{displayName}</span>
+                        </div>
+                      </Link>
+
                     )
                   }
-                  <span className='text-gray-300'>{displayName}</span>
+
                   <button onClick={signOut} className='bg-red-500 px-3 py-1 rounded'>
                     Sign out
                   </button>
@@ -141,10 +150,19 @@ const Navbar = () => {
                         <div className='flex items-center space-x-4'>
                           {
                             user.user_metadata.avatar_url && (
-                              <img src={user.user_metadata.avatar_url} alt='profile' className='w-8 h-8 rounded-full object-cover' />
+
+                              <Link
+                                to={"/profile"}
+                                className='text-gray-300 hover:text-white transition-colors'
+                              >
+                                <div className='flex justify-between'>
+                                  <img src={user.user_metadata.avatar_url} alt='profile' className='w-8 h-8 rounded-full object-cover' />
+                                  <span className='text-gray-300'>{displayName}</span>
+                                </div>
+                              </Link>
+
                             )
                           }
-                          <span className='text-gray-300'>{displayName}</span>
                         </div>
 
                         <div>
