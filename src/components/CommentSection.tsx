@@ -58,7 +58,7 @@ const CommentSection = ({ postId }: Props) => {
 
   const { mutate, isPending, isError } = useMutation({
     mutationFn: (newComment: NewComment) => 
-      createComment(newComment, postId, user?.id, user?.user_metadata.user_name),
+      createComment(newComment, postId, user?.id, user?.user_metadata.name),
       onSuccess: () => {
         queryClient.invalidateQueries({queryKey: ["comments", postId]})
       }

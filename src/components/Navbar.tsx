@@ -6,7 +6,7 @@ const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false)
   const { signInWithGithub, signOut, user } = useAuth()
 
-  const displayName = user?.user_metadata.user_name || user?.email
+  const displayName = user?.user_metadata.name || user?.email
 
   const menuRef = useRef<HTMLDivElement | null>(null);
 
