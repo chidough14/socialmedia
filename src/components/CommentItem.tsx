@@ -39,7 +39,7 @@ const CommentItem = ({ comment, postId }: Props) => {
 
   const { mutate, isPending, isError } = useMutation({
     mutationFn: (replyContent: string) =>
-      createReply(replyContent, postId, comment.id, user?.id, user?.user_metadata.user_name),
+      createReply(replyContent, postId, comment.id, user?.id, user?.user_metadata.name),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["comments", postId] })
       setReplyText("")
