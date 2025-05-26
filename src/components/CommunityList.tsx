@@ -31,7 +31,11 @@ const CommunityList = () => {
       {
         data?.map((community, key) => (
           <div key={key} className='border border-white/10 p-4 rounded hover:-translate-y-1 transition transform'>
-            <Link to={`/community/${community.id}`} className='text-2xl font-bold text-purple-500 hover:underline'>
+            <Link 
+              to={`/community/${community.id}`} 
+              state={{name: community.name}} 
+              className='text-2xl font-bold text-purple-500 hover:underline'
+            >
               { community.name }
             </Link>
 
