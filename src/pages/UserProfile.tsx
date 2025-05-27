@@ -4,6 +4,7 @@ import { User } from "@supabase/supabase-js"
 import { supabase } from "../supabase-client"
 
 const fetchUserByEmail = async (email: string): Promise<User> => {
+  
   const { data, error } = await supabase.from("profiles").select("*").eq("email", email).single()
 
   if (error) throw new Error(error.message)

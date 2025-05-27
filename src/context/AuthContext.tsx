@@ -1,5 +1,5 @@
 import { User } from "@supabase/supabase-js";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { supabase } from "../supabase-client";
 
 interface AuthContextType {
@@ -34,6 +34,8 @@ const insertProfileIfNew = async (user: User) => {
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null)
 
+  const hasInserted = useRef(false)
+
   useEffect(() => {
     supabase.auth.getSession().then(({data: {session}}) => {
       setUser(session?.user ?? null)
@@ -41,7 +43,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     const {data: listener} = supabase.auth.onAuthStateChange((_, session) => {
       setUser(session?.user ?? null)
-      if (session?.user) {
+      
+      if (session?.user && !hasInserted.current) {
         insertProfileIfNew(session.user);
       }
     })
