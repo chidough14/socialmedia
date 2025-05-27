@@ -18,12 +18,15 @@ const insertProfileIfNew = async (user: User) => {
     .single();
 
   if (!data) {
-    const { error: insertError } = await supabase.from("profiles").insert({
+    const { error: insertError } = await supabase.from("profiles").upsert({
       name: user.user_metadata?.full_name,
       avatar: user.user_metadata?.avatar_url || null,
       email: user.email,
       user_id: user.id
-    });
+    },{
+      onConflict: "user_id",
+      ignoreDuplicates: true
+    })
 
     if (insertError) {
       console.error("Error inserting profile:", insertError);
@@ -37,13 +40,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const hasInserted = useRef(false)
 
   useEffect(() => {
-    supabase.auth.getSession().then(({data: {session}}) => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null)
     })
 
-    const {data: listener} = supabase.auth.onAuthStateChange((_, session) => {
+    const { data: listener } = supabase.auth.onAuthStateChange((_, session) => {
       setUser(session?.user ?? null)
-      
+
       if (session?.user && !hasInserted.current) {
         insertProfileIfNew(session.user);
       }
