@@ -1,5 +1,4 @@
 import { useParams } from "react-router"
-import { useAuth } from "../context/AuthContext"
 import { useQuery } from "@tanstack/react-query"
 import { User } from "@supabase/supabase-js"
 import { supabase } from "../supabase-client"
