@@ -10,6 +10,7 @@ export interface Post {
   image_url: string
   avatar_url: string
   user_name: string
+  user_email: string
   like_count?: number
   comment_count?: number
   community: {

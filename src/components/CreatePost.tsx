@@ -10,6 +10,7 @@ interface PostInput {
   content: string
   avatar_url: string | null
   user_name: string | null
+  user_email: string | null
   community_id?: number | null
 }
 
@@ -66,6 +67,7 @@ const CreatePost = () => {
         content,
         avatar_url: user?.user_metadata.avatar_url || null,
         user_name: user?.user_metadata.name || null, 
+        user_email: user?.email || null, 
         community_id: communityId
       },
       imageFile: selectedFile

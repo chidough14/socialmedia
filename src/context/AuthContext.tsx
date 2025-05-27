@@ -10,6 +10,27 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
+const insertProfileIfNew = async (user: User) => {
+  const { data } = await supabase
+    .from("profiles")
+    .select("user_id")
+    .eq("user_id", user.id)
+    .single();
+
+  if (!data) {
+    const { error: insertError } = await supabase.from("profiles").insert({
+      name: user.user_metadata?.full_name,
+      avatar: user.user_metadata?.avatar_url || null,
+      email: user.email,
+      user_id: user.id
+    });
+
+    if (insertError) {
+      console.error("Error inserting profile:", insertError);
+    }
+  }
+};
+
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null)
 
@@ -20,6 +41,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     const {data: listener} = supabase.auth.onAuthStateChange((_, session) => {
       setUser(session?.user ?? null)
+      if (session?.user) {
+        insertProfileIfNew(session.user);
+      }
     })
 
     return () => {

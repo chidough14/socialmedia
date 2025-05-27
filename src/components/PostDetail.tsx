@@ -48,12 +48,12 @@ const PostDetail = ({ postId }: Props) => {
       <p className="text-gray-500 text-sm">
         Posted by: &nbsp;
         <Link
-          to={"/community/create"}
+          to={`/profile/${data?.user_email}`}
           className='text-gray-300 hover:text-white transition-colors'
         >  {data?.user_name} </Link>
         &nbsp; in &nbsp;
         <Link
-          to={"/community/create"}
+          to={`/community/${data?.community.id}`} 
           className='text-gray-300 hover:text-white transition-colors'
         > {data?.community.name} </Link>
       </p>

@@ -43,18 +43,29 @@ const Navbar = () => {
               to={"/"}
               className='text-gray-300 hover:text-white transition-colors'
             > Home </Link>
-            <Link
-              to={"/create"}
-              className='text-gray-300 hover:text-white transition-colors'
-            > Create Post </Link>
+
+            {
+              user ? (
+                <Link
+                  to={"/create"}
+                  className='text-gray-300 hover:text-white transition-colors'
+                > Create Post </Link>
+              ) : null
+            }
+
             <Link
               to={"/communities"}
               className='text-gray-300 hover:text-white transition-colors'
             > Communities </Link>
-            <Link
-              to={"/community/create"}
-              className='text-gray-300 hover:text-white transition-colors'
-            > Create Community </Link>
+
+            {
+              user ? (
+                <Link
+                  to={"/community/create"}
+                  className='text-gray-300 hover:text-white transition-colors'
+                > Create Community </Link>
+              ) : null
+            }
           </div>
 
           {/* Destop Auth */}
@@ -65,7 +76,7 @@ const Navbar = () => {
                   {
                     user.user_metadata.avatar_url && (
                       <Link
-                        to={"/profile"}
+                        to={`/profile/${user.email}`}
                         className='text-gray-300 hover:text-white transition-colors'
                       >
                         <div className='flex justify-between'>
@@ -152,7 +163,7 @@ const Navbar = () => {
                             user.user_metadata.avatar_url && (
 
                               <Link
-                                to={"/profile"}
+                                to={`/profile/${user.email}`}
                                 className='text-gray-300 hover:text-white transition-colors'
                               >
                                 <div className='flex justify-between'>

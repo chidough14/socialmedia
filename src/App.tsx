@@ -22,7 +22,7 @@ function App() {
           <Route path='/community/create' element={<CreateCommunityPage />} />
           <Route path='/communities' element={<CommunitiesPage />} />
           <Route path='/community/:id' element={<CommunityPage />} />
-          <Route path='/profile' element={<UserProfile />} />
+          <Route path='/profile/:email' element={<UserProfile />} />
         </Routes>
       </div>
     </div>
