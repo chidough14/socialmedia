@@ -14,7 +14,6 @@ const fetchUserByEmail = async (email: string): Promise<User> => {
 
 
 const UserProfile = () => {
-  const { user } = useAuth()
 
   const { email } = useParams<{email: string}>()
   
