@@ -11,16 +11,18 @@ const fetchUserByEmail = async (email: string): Promise<User> => {
 
   if (error) throw new Error(error.message)
 
-  return data
+  return data as User
 }
 
 const fetchPostsByEmail = async (email: string): Promise<Post[]> => {
 
-  const { data, error } = await supabase.from("posts").select("*").eq("user_email", email)
+  // const { data, error } = await supabase.from("posts").select("*").eq("user_email", email)
+
+  const { data, error } = await supabase.rpc("get_user_posts_with_counts", { user_email_param: email })
 
   if (error) throw new Error(error.message)
 
-  return data
+  return data as Post[]
 }
 
 
@@ -82,10 +84,19 @@ const UserProfile = () => {
             <p className="text-gray-400 text-center">No posts yet.</p>
           ) : (
             posts.map((post, key) => (
-              <Link  to={`/post/${post.id}`} key={key}>
+              <Link to={`/post/${post.id}`} key={key}>
                 <div key={post.id} className="border p-4 rounded shadow">
                   <h3 className="text-xl font-semibold">{post.title}</h3>
                   <p className="text-gray-500">{post.content}</p>
+
+                  <div className="flex justify-around items-center">
+                    <span className="cursor-pointer h-10 w-[50px] px-1 flex items-center justify-center font-extrabold rounded-lg">
+                      ❤️ <span className="ml-2">{post.like_count ?? 0}</span>
+                    </span>
+                    <span className="cursor-pointer h-10 w-[50px] px-1 flex items-center justify-center font-extrabold rounded-lg">
+                      💬 <span className="ml-2">{post.comment_count ?? 0}</span>
+                    </span>
+                  </div>
                 </div>
               </Link>
             ))
