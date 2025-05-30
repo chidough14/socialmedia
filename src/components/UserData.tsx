@@ -18,7 +18,7 @@ export default function UserData({  email }: { email: string | undefined }) {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  const { data,  isLoading } = useQuery<any, Error>(
+  const { data, error, isSuccess, isLoading } = useQuery<any, Error>(
     { 
       queryKey: ["userData", email!], 
       queryFn: () => fetchUserByEmail(email!),
@@ -28,10 +28,27 @@ export default function UserData({  email }: { email: string | undefined }) {
   )
 
   useEffect(() => {
-    if (data) {
-      setBio(data.bio || "")
+    if (isSuccess) {
+      // Handle successful data fetch
+      console.log('Data fetched successfully:', data);
+      if (data) {
+        setBio(data.bio || "")
+      }
     }
-  }, [data])
+  }, [isSuccess, data]);
+
+  useEffect(() => {
+    if (error) {
+      // Handle error
+      console.error('Error fetching data:', error);
+    }
+  }, [error]);
+
+  // useEffect(() => {
+  //   if (data) {
+  //     setBio(data.bio || "")
+  //   }
+  // }, [data])
 
   const handleUpdateBio = async () => {
     setLoading(true);
@@ -97,7 +114,8 @@ export default function UserData({  email }: { email: string | undefined }) {
           </>
         ) : (
           <div className="flex items-center justify-between mt-2">
-              {isLoading ? "...Loading" : <p className="text-gray-300">{bio || "No bio added yet."}</p>}
+              {isLoading ? <p>Loading...</p> : isSuccess ? <p className="text-gray-300">{bio || "No bio added yet."}</p> : <p>Error</p>}
+              {/* {isLoading ? "...Loading" : <p className="text-gray-300">{bio || "No bio added yet."}</p>} */}
             {/* {bio === "" ? <p className="text-gray-300">No bio added yet.</p> : null} */}
             <button
               onClick={() => setIsEditing(true)}
