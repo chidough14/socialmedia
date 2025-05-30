@@ -3,7 +3,8 @@ import { useQuery } from "@tanstack/react-query"
 import { supabase } from "../supabase-client"
 import { useState } from "react"
 import { Post } from "../components/PostList"
-import UpdateBio from "../components/UpdateBio"
+import UserData from "../components/UserData"
+
 
 // const fetchUserByEmail = async (email: string): Promise<User> => {
 
@@ -104,7 +105,7 @@ const UserProfile = () => {
           )}
         </div>
       ) : (
-      <UpdateBio email={email} />
+      <UserData email={email} />
       )}
 
     </div>

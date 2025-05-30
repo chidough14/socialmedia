@@ -12,13 +12,13 @@ const fetchUserByEmail = async (email: string): Promise<User> => {
   return data as User
 }
 
-export default function UpdateBio({  email }: { email: string | undefined }) {
+export default function UserData({  email }: { email: string | undefined }) {
   const [bio, setBio] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  const { data } = useQuery<any, Error>(
+  const { data,  isLoading } = useQuery<any, Error>(
     { 
       queryKey: ["userData", email!], 
       queryFn: () => fetchUserByEmail(email!),
@@ -28,7 +28,6 @@ export default function UpdateBio({  email }: { email: string | undefined }) {
   )
 
   useEffect(() => {
-    console.log(data)
     if (data) {
       setBio(data.bio || "")
     }
@@ -98,7 +97,7 @@ export default function UpdateBio({  email }: { email: string | undefined }) {
           </>
         ) : (
           <div className="flex items-center justify-between mt-2">
-                <p className="text-gray-300">{bio || "No bio added yet."}</p>
+              {isLoading ? "...Loading" : <p className="text-gray-300">{bio || "No bio added yet."}</p>}
             {/* {bio === "" ? <p className="text-gray-300">No bio added yet.</p> : null} */}
             <button
               onClick={() => setIsEditing(true)}
