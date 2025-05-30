@@ -1,18 +1,18 @@
 import { Link, useParams } from "react-router"
 import { useQuery } from "@tanstack/react-query"
-import { User } from "@supabase/supabase-js"
 import { supabase } from "../supabase-client"
 import { useState } from "react"
 import { Post } from "../components/PostList"
+import UpdateBio from "../components/UpdateBio"
 
-const fetchUserByEmail = async (email: string): Promise<User> => {
+// const fetchUserByEmail = async (email: string): Promise<User> => {
 
-  const { data, error } = await supabase.from("profiles").select("*").eq("email", email).single()
+//   const { data, error } = await supabase.from("profiles").select("*").eq("email", email).single()
 
-  if (error) throw new Error(error.message)
+//   if (error) throw new Error(error.message)
 
-  return data as User
-}
+//   return data as User
+// }
 
 const fetchPostsByEmail = async (email: string): Promise<Post[]> => {
 
@@ -32,7 +32,7 @@ const UserProfile = () => {
 
   const { email } = useParams<{ email: string }>()
 
-  const { data, error, isLoading } = useQuery<any, Error>({ queryKey: ["userData", email], queryFn: () => fetchUserByEmail(email!) })
+  // const { data, error, isLoading } = useQuery<any, Error>({ queryKey: ["userData", email], queryFn: () => fetchUserByEmail(email!) })
 
   const { data: posts = [], error: postsError, isLoading: isPostsLoading } = useQuery<Post[], Error>(
     {
@@ -42,19 +42,20 @@ const UserProfile = () => {
     }
   )
 
-  if (isLoading) return <div>...Loading</div>
+  // if (isLoading) return <div>...Loading</div>
 
-  if (error) {
-    return <div>Error: {error.message}</div>
-  }
+  // if (error) {
+  //   return <div>Error: {error.message}</div>
+  // }
+
 
   return (
     <div className="space-y-6">
 
       {/* Header */}
-      <h2 className="text-6xl font-bold mb-6 text-center bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
+      {/* <h2 className="text-6xl font-bold mb-6 text-center bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
         {data.name}'s Profile
-      </h2>
+      </h2> */}
 
       {/* Tabs */}
       <div className="flex justify-center gap-4 border-b pb-2">
@@ -103,17 +104,7 @@ const UserProfile = () => {
           )}
         </div>
       ) : (
-        <div className="space-y-4">
-          {data?.avatar && (
-            <img
-              src={data.avatar}
-              alt={data.name}
-              className="mt-4 rounded object-cover w-full h-64"
-            />
-          )}
-          <p className="text-gray-400">Email: {data?.email}</p>
-          <p className="text-gray-400">Bio: {data.bio}</p>
-        </div>
+      <UpdateBio email={email} />
       )}
 
     </div>

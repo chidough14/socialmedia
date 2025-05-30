@@ -142,18 +142,29 @@ const Navbar = () => {
                     to={"/"}
                     className='block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700'
                   > Home </Link>
-                  <Link
-                    to={"/create"}
-                    className='block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700'
-                  > Create Post </Link>
+
+                  {
+                    user ? (
+                      <Link
+                        to={"/create"}
+                        className='block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700'
+                      > Create Post </Link>
+                    ) : null
+                  }
+
                   <Link
                     to={"/communities"}
                     className='block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700'
                   > Communities </Link>
-                  <Link
-                    to={"/community/create"}
-                    className='block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700'
-                  > Create Community </Link>
+
+                  {
+                    user ? (
+                      <Link
+                        to={"/community/create"}
+                        className='block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700'
+                      > Create Community </Link>
+                    ) : null
+                  }
 
                   {
                     user ? (
